@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Inventory - Mycology Lab</title>
+</head>
+<body class="bg-gray-900 text-gray-200">
+
+    <!-- Sidebar and Inventory Layout -->
+    <div class="flex">
+        <!-- Sidebar -->
+        <div class="w-64 bg-gray-800 text-white h-screen p-4">
+            <h1 class="text-2xl font-semibold mb-8">Mycology Lab</h1>
+            <ul>
+                <li class="mb-4">
+                    <a href="/inventory" class="text-lg hover:text-green-300">Inventory</a>
+                </li>
+                <li class="mb-4">
+                    <a href="/grow-log" class="text-lg hover:text-green-300">Grow Log</a>
+                </li>
+                <li class="mb-4">
+                    <a href="/equipment" class="text-lg hover:text-green-300">Lab Equipment</a>
+                </li>
+                <li class="mb-4">
+                    <a href="/genetic-inventory" class="text-lg hover:text-green-300">Genetic Inventory</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="flex-1 p-8">
+            <h2 class="text-3xl font-semibold mb-6 text-green-300">Inventory</h2>
+
+            <!-- Lab Equipment Section -->
+            <div class="bg-gray-800 rounded-lg p-6 mb-6 shadow-lg">
+                <h3 class="text-xl font-semibold text-green-300 mb-4">Lab Equipment</h3>
+                <p class="text-gray-400 mb-4">Track and manage incubators, flow hoods, and other lab tools.</p>
+                <div class="flex justify-between items-center">
+                    <a href="/inventory/equipment" class="text-green-400 hover:underline">View Equipment</a>
+                    <a href="/inventory/equipment/new" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">+ Add Item</a>
+                </div>
+            </div>
+
+            <!-- Genetic Inventory Section -->
+            <div class="bg-gray-800 rounded-lg p-6 mb-6 shadow-lg">
+                <h3 class="text-xl font-semibold text-green-300 mb-4">Genetic Inventory</h3>
+                <p class="text-gray-400 mb-4">Track spores, agar slants, and syringes.</p>
+                <div class="flex justify-between items-center">
+                    <a href="/inventory/genetic-inventory" class="text-green-400 hover:underline">View Genetics</a>
+                    <a href="/inventory/genetic-inventory/new" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">+ Add Item</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

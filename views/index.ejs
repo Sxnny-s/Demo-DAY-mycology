@@ -5,75 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Mycology Dashboard</title>
+    <style>
+        body {
+            background-color: #1a1a2e; /* Dark background */
+        }
+    </style>
 </head>
-<body class="bg-gray-100">
+<body class="text-white">
 
     <!-- Sidebar and Dashboard Layout -->
     <div class="flex">
         <!-- Sidebar -->
-        <div class="w-64 bg-gray-800 text-white h-screen p-4">
-            <h1 class="text-2xl font-semibold mb-8">Mycology Lab</h1>
+        <div class="w-64 bg-gray-900 text-white h-screen p-4 border-r border-gray-700">
+            <h1 class="text-3xl font-bold mb-8 text-blue-400">Mycology Lab</h1>
             <ul>
-                <li class="mb-4">
-                    <a href="/inventory" class="text-lg hover:text-blue-400">Inventory</a>
+                <li class="mb-6">
+                    <a href="/inventory" class="text-lg hover:text-purple-400 transition-colors duration-300">Inventory</a>
                 </li>
-                <li class="mb-4">
-                    <a href="/grow-log" class="text-lg hover:text-blue-400">Grow Log</a>
+                <li class="mb-6">
+                    <a href="/grow-log" class="text-lg hover:text-purple-400 transition-colors duration-300">Grow Log</a>
                 </li>
-                <li class="mb-4">
-                    <a href="/equipment" class="text-lg hover:text-blue-400">Lab Equipment</a>
+                <li class="mb-6">
+                    <a href="/equipment" class="text-lg hover:text-purple-400 transition-colors duration-300">Lab Equipment</a>
                 </li>
-                <li class="mb-4">
-                    <a href="/genetic-inventory" class="text-lg hover:text-blue-400">Genetic Inventory</a>
+                <li class="mb-6">
+                    <a href="/genetic-inventory" class="text-lg hover:text-purple-400 transition-colors duration-300">Genetic Inventory</a>
                 </li>
             </ul>
         </div>
 
         <!-- Main Content Area -->
         <div class="flex-1 p-8">
-            <h2 class="text-3xl font-semibold mb-6">Dashboard</h2>
+            <h2 class="text-4xl font-extrabold mb-8 text-blue-400">Dashboard</h2>
 
             <!-- Inventory Section -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-8">
-                <div class="card bg-white shadow-md rounded-lg p-6">
-                    <h3 class="text-xl font-semibold mb-4">Mushrooms Inventory</h3>
-                    <p class="text-gray-600">Track species, quantity, and growth stages.</p>
-                    <a href="/inventory/mushrooms" class="text-blue-500 mt-4 inline-block">View Inventory</a>
-                </div>
-
-                <div class="card bg-white shadow-md rounded-lg p-6">
-                    <h3 class="text-xl font-semibold mb-4">Harvest Inventory</h3>
-                    <p class="text-gray-600">Keep track of recent harvests.</p>
-                    <a href="/inventory/harvest" class="text-blue-500 mt-4 inline-block">View Harvest Log</a>
-                </div>
-
-                <div class="card bg-white shadow-md rounded-lg p-6">
-                    <h3 class="text-xl font-semibold mb-4">Genetic Inventory</h3>
-                    <p class="text-gray-600">Log different genetic strains, spore syringes, and agar slants.</p>
-                    <a href="/inventory/genetics" class="text-blue-500 mt-4 inline-block">View Genetic Inventory</a>
-                </div>
-            </div>
-
-            <!-- Equipment Section -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-8">
-                <div class="card bg-white shadow-md rounded-lg p-6">
-                    <h3 class="text-xl font-semibold mb-4">Lab Equipment</h3>
-                    <p class="text-gray-600">Document equipment like flow hoods, incubators, etc.</p>
-                    <a href="/equipment" class="text-blue-500 mt-4 inline-block">View Equipment Status</a>
-                </div>
-
-                <div class="card bg-white shadow-md rounded-lg p-6">
-                    <h3 class="text-xl font-semibold mb-4">Equipment Repairs</h3>
-                    <p class="text-gray-600">Track equipment maintenance and repairs.</p>
-                    <a href="/equipment/repairs" class="text-blue-500 mt-4 inline-block">View Repairs Log</a>
-                </div>
+            <div class="bg-gray-800 shadow-lg rounded-lg p-6 mb-8 hover:shadow-purple-500/50 transition-shadow duration-300">
+                <h3 class="text-2xl font-bold mb-4 text-purple-400">Inventory</h3>
+                <p class="text-gray-300 mb-4">Manage your items in the lab. Choose a section to view more details:</p>
+                <a href="/inventory" class="text-blue-500 hover:text-purple-400 transition-colors duration-300 mt-4 inline-block">Go to Inventory</a>
             </div>
 
             <!-- Grow Log Section -->
-            <div class="card bg-white shadow-md rounded-lg p-6 mb-8">
-                <h3 class="text-xl font-semibold mb-4">Grow Log</h3>
-                <p class="text-gray-600">Log your work and experiments in the lab.</p>
-                <a href="/grow-log/new" class="text-blue-500 mt-4 inline-block">Add New Log Entry</a>
+            <div class="bg-gray-800 shadow-lg rounded-lg p-6 mb-8 hover:shadow-purple-500/50 transition-shadow duration-300">
+                <h3 class="text-2xl font-bold mb-4 text-purple-400">Grow Log</h3>
+                <p class="text-gray-300">Log your work and experiments in the lab.</p>
+                <a href="/grow-log/new" class="text-blue-500 hover:text-purple-400 transition-colors duration-300 mt-4 inline-block">Add New Log Entry</a>
             </div>
         </div>
     </div>
