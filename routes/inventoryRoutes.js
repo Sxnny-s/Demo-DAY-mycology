@@ -18,15 +18,24 @@ router.get('/equipment/new', (req, res) => {
 
 
 // Genetics section
-router.get('/genetic-inventory', (req, res) => {
-    res.render('inventory/genetics-inventory');
-});
+router.get('/genetic-inventory',geneticController.getallGenetics )
 
 router.get('/genetic-inventory/new', (req, res) => {
-    res.render('inventory/newGenetics'); 
+    res.render('inventory/newGenetics', {
+    }); 
 });
 
 // // POST route to handle form submission
 router.post('/genetic-inventory', geneticController.createGenetic)
+
+
+
+// Delete routes
+router.delete('/genetic/delete/:id',geneticController.deleteGenetic)
+
+
+
+// Update routes 
+router.put('/genetic/update/:id', geneticController.updateGenetic)
 
 module.exports = router;
