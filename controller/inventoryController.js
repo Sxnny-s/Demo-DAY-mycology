@@ -1,27 +1,10 @@
 const Genetic = require('../models/Genetics'); 
+const Lab = require('../models/Lab');
 
-// Getting all genetics
-
-exports.getallGenetics = async (req,res) => {
-    // Finds all genetics tied to the users ID
-    try {
-        const recentGenetics = await Genetic.find({user: req.user._id}).sort({date: -1})
-        res.render('inventory/genetics-inventory',{
-            recentGenetics,
-            name: req.user.name    
-        });
-    } catch (err) {
-        console.error(err);
-        res.redirect('/inventory');
-    }
-
-}
-
-// adding new genetics
+// ----------------- Create Operations -----------------
+// Adding new genetics
 exports.createGenetic = async (req, res) => {
-    const {type, species, strain, isolation, quantity} = req.body
-    console.log(req.user);
-    // making logging entries form genetic form
+    const { type, species, strain, isolation, quantity } = req.body;
     const newGenetic = new Genetic({
         type,
         species,
@@ -29,44 +12,140 @@ exports.createGenetic = async (req, res) => {
         isolation,
         quantity,
         user: req.user._id
-    })
+    });
 
-    // adding form to database
-    try{
+    try {
         await newGenetic.save();
-        res.redirect('/inventory')
-    }catch(err){
-        console.error(err)
-        res.redirect('/inventory/genetic-inventory/new')
+        res.redirect('/inventory');
+    } catch (err) {
+        console.error(err);
+        res.redirect('/inventory/genetic-inventory/new');
     }
-}
+};
 
-// Deleting Genetics 
-exports.deleteGenetic = async (req,res) => {
-    console.log(req.params.id)
-    try{
-        await Genetic.findByIdAndDelete(req.params.id)
-        res.status(200).send('Deleted Successfully')
-    }catch (err){
-        res.status(500).send('Server request failed, Error Deleting')
+// Adding new lab equipment
+exports.createEquipment = async (req, res) => {
+    const { item, quantity, price, purchaseDate } = req.body;
+    const newLab = new Lab({
+        item,
+        quantity,
+        price,
+        user: req.user._id
+    });
+
+    try {
+        await newLab.save();
+        res.redirect('/inventory');
+    } catch (err) {
+        console.error(err);
+        res.redirect('/inventory/equipment/new');
     }
-}
+};
 
-// Updating Genetics
+// ----------------- Read Operations -----------------
+// Getting Main Inventory Page
+exports.getMainPage = (req, res) => {
+    res.render('inventory/inventory'); 
+};
 
-exports.updateGenetic = async (req,res) => {
+// Getting add new genetics form
+exports.getNewGeneticForm = (req, res) => {
+    res.render('inventory/newGenetics'); 
+};
+// Getting add new lab equipment form 
+exports.getNewLabForm = (req, res) => {
+    res.render('inventory/newEquipment'); 
+};
+
+
+
+// Getting all genetics
+exports.getallGenetics = async (req, res) => {
+    try {
+        const recentGenetics = await Genetic.find({ user: req.user._id }).sort({ date: -1 });
+        res.render('inventory/genetics-inventory', {
+            recentGenetics,
+            name: req.user.name
+        });
+    } catch (err) {
+        console.error(err);
+        res.redirect('/inventory');
+    }
+};
+
+
+// Viewing all lab equipment
+exports.getAllEquipment = async (req, res) => {
+    try {
+        const recentEquipment = await Lab.find({ user: req.user._id }).sort({ date: -1 });
+        res.render('inventory/equipment', {
+            recentEquipment,
+            name: req.user.name
+        });
+    } catch (err) {
+        console.error(err);
+        res.redirect('/inventory');
+    }
+};
+
+// ----------------- Update Operations -----------------
+// Updating genetics
+exports.updateGenetic = async (req, res) => {
     const { species, strain, isolation, quantity } = req.body;
-    // console.log(species)
-    try{
-        await Genetic.findByIdAndUpdate(req.params.id,{
+
+    try {
+        await Genetic.findByIdAndUpdate(req.params.id, {
             species,
             strain,
             isolation,
             quantity
-        })
-        res.status(200).json({message: 'Genetic data updated successfully'})
-    }catch (err) {
+        });
+        res.status(200).json({ message: 'Genetic data updated successfully' });
+    } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Failed to update genetic data' });
     }
+};
+
+// Updating inventory
+exports.updateLab = async (req, res) => {
+    const {item, quantity, price, purchaseDate} = req.body
+
+    try {
+        await Lab.findByIdAndUpdate(req.params.id, {
+            item,
+            quantity,
+            price,
+            purchaseDate,
+            user: req.user._id
+            
+        });
+        res.status(200).json({message: 'Lab data updated successfully'});
+    } catch (error) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to update lab data' });
+    }
 }
+
+// ----------------- Delete Operations -----------------
+// Deleting genetics
+exports.deleteGenetic = async (req, res) => {
+    try {
+        await Genetic.findByIdAndDelete(req.params.id);
+        res.status(200).send('Deleted Successfully');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server request failed, Error Deleting');
+    }
+};
+
+// Deleting lab equipment
+exports.deleteLab = async (req, res) => {
+    try {
+        await Lab.findByIdAndDelete(req.params.id);
+        res.status(200).send('Deleted Successfully');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server request failed, Error Deleting');
+    }
+};

@@ -1,41 +1,40 @@
 const express = require('express');
 const router = express.Router();
-const geneticController = require('../controller/inventoryController')
+const inventoryController = require('../controller/inventoryController');
 
-// Main inventory page
-router.get('/', (req, res) => {
-    res.render('inventory/inventory'); 
-});
+// ------------------ Main Inventory Page ------------------
+router.get('/', inventoryController.getMainPage)
 
-// Lab equipment section
-router.get('/equipment', (req, res) => {
-    res.render('inventory/equipment'); 
-});
+// ------------------ Lab Equipment Routes ------------------
+// GET all lab equipment
+router.get('/equipment', inventoryController.getAllEquipment);
 
-router.get('/equipment/new', (req, res) => {
-    res.render('inventory/newEquipment'); 
-});
+// GET form to add new lab equipment
+router.get('/equipment/new',inventoryController.getNewLabForm )
+// POST route to add new lab equipment
+router.post('/lab-inventory', inventoryController.createEquipment);
 
+// DELETE route to remove lab equipment
+router.delete('/equipment/delete/:id', inventoryController.deleteLab);
 
-// Genetics section
-router.get('/genetic-inventory',geneticController.getallGenetics )
-
-router.get('/genetic-inventory/new', (req, res) => {
-    res.render('inventory/newGenetics', {
-    }); 
-});
-
-// // POST route to handle form submission
-router.post('/genetic-inventory', geneticController.createGenetic)
+// PUT route to update genetics
+router.put('/equipment/update/:id', inventoryController.updateLab);
 
 
+// ------------------ Genetics Routes ------------------
+// GET all genetics
+router.get('/genetic-inventory', inventoryController.getallGenetics);
 
-// Delete routes
-router.delete('/genetic/delete/:id',geneticController.deleteGenetic)
+// GET form to add new genetics
+router.get('/genetic-inventory/new',inventoryController.getNewGeneticForm)
 
+// POST route to add new genetics
+router.post('/genetic-inventory', inventoryController.createGenetic);
 
+// PUT route to update genetics
+router.put('/genetic/update/:id', inventoryController.updateGenetic);
 
-// Update routes 
-router.put('/genetic/update/:id', geneticController.updateGenetic)
+// DELETE route to remove genetics
+router.delete('/genetic/delete/:id', inventoryController.deleteGenetic);
 
 module.exports = router;

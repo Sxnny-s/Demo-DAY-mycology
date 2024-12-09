@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start a New Grow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-gray-200">
+
+    <div class="container mx-auto p-6">
+        <h2 class="text-3xl font-semibold mb-6 text-green-400">Start a New Grow</h2>
+
+        <form action="/grow-log/new" method="POST" class="bg-gray-800 p-6 rounded-lg shadow-md">
+
+            <!-- Tek Input -->
+            <div class="mb-4">
+                <label for="tek" class="block text-gray-300 font-semibold">Tek (optional)</label>
+                <input type="text" name="tek" id="tek" class="w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500">
+            </div>
+
+            <!-- Species Input -->
+            <div class="mb-4">
+                <label for="species" class="block text-gray-300 font-semibold">Species</label>
+                <input type="text" name="species" id="species" class="w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500" required>
+            </div>
+
+            <!-- Strain Input -->
+            <div class="mb-4">
+                <label for="strain" class="block text-gray-300 font-semibold">Strain</label>
+                <input type="text" name="strain" id="strain" class="w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500" required>
+            </div>
+
+            <!-- Generation Input -->
+            <div class="mb-4">
+                <label for="generation" class="block text-gray-300 font-semibold">Generation</label>
+                <input type="number" name="generation" id="generation" class="w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500" required>
+            </div>
+
+            <!-- Contamination Input (Hidden) -->
+            <input type="hidden" name="contamination" value="false">
+
+            <!-- Substrate Type Input -->
+            <div class="mb-4">
+                <label for="substrateType" class="block text-gray-300 font-semibold">Substrate Type</label>
+                <input type="text" name="substrateType" id="substrateType" class="w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500" required>
+            </div>
+
+            <!-- Grain Type Input -->
+            <div class="mb-4">
+                <label for="grainType" class="block text-gray-300 font-semibold">Grain Type</label>
+                <input type="text" name="grainType" id="grainType" class="w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500" required>
+            </div>
+
+            <!-- Substrate Depth (in inches) -->
+            <div class="mb-4">
+                <label for="substrateDepth" class="block text-gray-300 font-semibold">Substrate Depth (in)</label>
+                <input type="number" step="0.1" name="substrateDepth" id="substrateDepth" class="w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500">
+            </div>
+
+            <!-- Submit Button -->
+            <div class="flex justify-end">
+                <button type="submit" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-all duration-300">Start Grow</button>
+            </div>
+
+        </form>
+    </div>
+
+</body>
+</html>

@@ -11,8 +11,11 @@ const flash = require('express-flash');
 const app = express();
 const initPassport = require('./config/passport');
 
+
 const authRoutes = require('./routes/authRoutes');  // Import the authRoutes
 const inventoryRoutes = require('./routes/inventoryRoutes');
+const growLogRouts = require('./routes/mushroomRoutes');
+const morgan = require('morgan');
 
 
 // Authentication Check Middleware
@@ -38,8 +41,9 @@ initPassport(
 );
 
 // Middleware
+app.use(morgan('tiny'))
+app.use(express.json());
 app.set('view engine', 'ejs');
-// app.set('views', path.join(__dirname, 'views'));  
 app.use(express.urlencoded({ extended: true }));
 app.use(flash());
 app.use(session({
@@ -62,7 +66,8 @@ app.use(authRoutes);
 
 // Inventory routes 
 app.use('/inventory',checkAuth, inventoryRoutes)
-
+// Grow log routes
+app.use('/grow-log',checkAuth, growLogRouts)
 
 // Start the server
 const PORT = 8888;

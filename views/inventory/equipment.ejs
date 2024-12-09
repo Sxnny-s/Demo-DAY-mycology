@@ -3,10 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Lab Equipment Inventory</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-<body>
-    <h1>helll</h1>
-    
+<body class="bg-gray-900 text-gray-200 min-h-screen p-6">
+
+    <h1 class="text-4xl font-bold text-green-400 mb-8 text-center">
+        Welcome to your Lab Equipment Inventory, <%= name %>
+    </h1>
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full table-auto bg-gray-800 rounded-lg shadow-md">
+            <thead>
+                <tr class="border-b border-gray-700">
+                    <th class="p-4 text-left text-gray-200">Item</th>
+                    <th class="p-4 text-left text-gray-200">Quantity</th>
+                    <th class="p-4 text-left text-gray-200">Price</th>
+                    <th class="p-4 text-left text-gray-200">Purchase Date</th>
+                    <th class="p-4 text-left text-gray-200">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% recentEquipment.forEach(equipment => { %>
+                    <tr class="border-b border-gray-700" data-id="<%= equipment._id %>">
+                        <!-- Editable Item -->
+                        <td class="p-4">
+                            <div class="id<%= equipment._id %> hidden edit-mode space-y-3">
+                                <input type="text" value="<%= equipment.item %>" class="item-input w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-gray-200 focus:ring-2 focus:ring-green-500">
+                            </div>
+                            <div class="id<%= equipment._id %> display-mode space-y-3">
+                                <p class="item-display text-gray-300"><%= equipment.item %></p>
+                            </div>
+                        </td>
+                        <!-- Quantity -->
+                        <td class="p-4">
+                            <div class="id<%= equipment._id %> hidden edit-mode space-y-3">
+                                <input type="number" value="<%= equipment.quantity %>" class="quantity-input w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-gray-200 focus:ring-2 focus:ring-green-500">
+                            </div>
+                            <div class="id<%= equipment._id %> display-mode space-y-3">
+                                <p class="quantity-display text-gray-300"><%= equipment.quantity %></p>
+                            </div>
+                        </td>
+                        <!-- Price -->
+                        <td class="p-4">
+                            <div class="id<%= equipment._id %> hidden edit-mode space-y-3">
+                                <input type="text" value="<%= equipment.price %>" class="price-input w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-gray-200 focus:ring-2 focus:ring-green-500">
+                            </div>
+                            <div class="id<%= equipment._id %> display-mode space-y-3">
+                                <p class="price-display text-gray-300"><%= equipment.price %></p>
+                            </div>
+                        </td>
+                        <!-- Purchase Date -->
+                        <td class="p-4">
+                            <div class="id<%= equipment._id %> hidden edit-mode space-y-3">
+                                <input type="date" value="<%= equipment.purchaseDate.toISOString().substring(0, 10) %>" class="date-input w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-gray-200 focus:ring-2 focus:ring-green-500">
+                            </div>
+                            <div class="id<%= equipment._id %> display-mode space-y-3">
+                                <p class="date-display text-gray-300"><%= equipment.purchaseDate.toDateString() %></p>
+                            </div>
+                        </td>
+                        <!-- Actions -->
+                        <td class="p-4 flex space-x-3">
+                            <!-- Edit button -->
+                            <button class="fas fa-edit text-blue-400 cursor-pointer hover:text-blue-600 text-xl transition-all duration-300"></button>
+                            <!-- Delete button -->
+                            <button class="fas fa-trash text-red-400 cursor-pointer hover:text-red-600 text-xl transition-all duration-300"></button>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const table = document.querySelector('table');
+            
+            // Listen for click events on the table for edit and delete buttons
+            table.addEventListener('click', function(e) {
+                if (e.target.classList.contains('fa-edit')) {
+                    handleEditClick(e);
+                } else if (e.target.classList.contains('fa-trash')) {
+                    handleDeleteClick(e);
+                }
+            });
+
+            function handleEditClick(e) {
+                const row = e.target.closest('tr');  // Get the parent row
+                const id = row.dataset.id;  // Get the equipment ID from the row's data-id
+
+                // Query for all input fields and display fields inside this row
+                const editMode = row.querySelectorAll('.edit-mode');
+                const displayMode = row.querySelectorAll('.display-mode');
+                
+                // Toggle between edit and display modes for all fields
+                editMode.forEach(field => field.classList.toggle('hidden'));
+                displayMode.forEach(field => field.classList.toggle('hidden'));
+
+                const inputFields = row.querySelectorAll('.edit-mode input');
+                const displayFields = row.querySelectorAll('.display-mode p');
+
+                const item = inputFields[0].value;  // Item name
+                const quantity = inputFields[1].value;
+                const price = inputFields[2].value;
+                const purchaseDate = inputFields[3].value;
+
+                fetch(`/inventory/equipment/update/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ item, quantity, price, purchaseDate }),
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Update the display fields with the new values
+                        displayFields[0].textContent = item;
+                        displayFields[1].textContent = quantity;
+                        displayFields[2].textContent = price;
+                        displayFields[3].textContent = new Date(purchaseDate).toDateString();
+                    } else {
+                        console.error('Error updating equipment');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+
+            function handleDeleteClick(e) {
+                const row = e.target.closest('tr');  // Get the parent row
+                const id = row.dataset.id;  // Get the equipment ID from the row's data-id
+                
+                fetch(`/inventory/equipment/delete/${id}`, {
+                    method: "DELETE",
+                    headers: {
+                        'content-type': 'application/json',
+                    },
+                })
+                .then(response => {
+                    if (response.ok) {
+                        row.remove();  // Remove the row from the table
+                    } else {
+                        console.error('Error deleting equipment');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        });
+    </script>
+
 </body>
 </html>

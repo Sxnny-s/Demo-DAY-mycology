@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Grow Log - Mycology Lab</title>
+</head>
+<body class="bg-gray-900 text-gray-200">
+
+    <!-- Sidebar and Layout -->
+    <div class="flex">
+        <!-- Sidebar -->
+        <div class="w-64 bg-gray-800 text-white h-screen p-4">
+            <h1 class="text-2xl font-semibold mb-8">Mycology Lab</h1>
+            <ul>
+                <li class="mb-4">
+                    <a href="/" class="text-lg hover:text-green-300">Home</a>
+                </li>
+                <li class="mb-4">
+                    <a href="/inventory" class="text-lg hover:text-green-300">Inventory</a>
+                </li>
+                <li class="mb-4">
+                    <a href="/grow-log" class="text-lg text-green-300">Grow Log</a>
+                </li>
+                <li class="mb-4">
+                    <a href="/equipment" class="text-lg hover:text-green-300">Lab Equipment</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="flex-1 p-8">
+            <h2 class="text-3xl font-semibold mb-6 text-green-300">Grow Log</h2>
+
+            <!-- Grow Log Section -->
+            <div class="bg-gray-800 rounded-lg p-6 mb-6 shadow-lg">
+                <h3 class="text-xl font-semibold text-green-300 mb-4">Manage Grows</h3>
+                <p class="text-gray-400 mb-4">Start new grows and monitor ongoing and past projects.</p>
+                <div class="flex justify-between items-center">
+                    <a href="/grow-log/all" class="text-green-400 hover:underline">View All Grows</a>
+                    <a href="/grow-log/new" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">+ Start a New Grow</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

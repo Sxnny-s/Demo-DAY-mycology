@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const InventorySchema = new mongoose.Schema({
+const LabSchema = new mongoose.Schema({ 
     item: {
         type: String,
         required: true
@@ -9,13 +9,9 @@ const InventorySchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    unit: {
-        type: String,
+    price:{
+        type: Number,
         required: true
-    },
-    strain: {
-        type: String,  // optional strain field
-        required: false
     },
     purchaseDate: {
         type: Date,
@@ -28,4 +24,4 @@ const InventorySchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('Inventory', InventorySchema);
+module.exports = mongoose.model('Lab', LabSchema);

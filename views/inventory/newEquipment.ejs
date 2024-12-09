@@ -3,10 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Add New Lab Equipment</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>hello</h1>
-    
+<body class="bg-gray-900 text-gray-200">
+
+    <div class="container mx-auto p-6">
+        <h2 class="text-2xl font-semibold mb-6 text-green-300">Add New Lab Equipment</h2>
+
+        <!-- Form to add new lab equipment -->
+        <form action="/inventory/lab-inventory" method="POST" class="bg-gray-800 p-6 rounded-lg shadow-lg">
+
+            <!-- Item Input -->
+            <div class="mb-4">
+                <label for="item" class="block text-gray-400 font-semibold">Item</label>
+                <input type="text" name="item" id="item" class="mt-2 block w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:bg-gray-600 text-gray-200 transition"> 
+            </div>
+
+            <!-- Quantity Input -->
+            <div class="mb-4">
+                <label for="quantity" class="block text-gray-400 font-semibold">Quantity</label>
+                <input type="number" name="quantity" id="quantity" class="mt-2 block w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:bg-gray-600 text-gray-200 transition"> 
+            </div>
+
+            <!-- Price Input -->
+            <div class="mb-4">
+                <label for="price" class="block text-gray-400 font-semibold">Price</label>
+                <input type="text" name="price" id="price" class="mt-2 block w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:bg-gray-600 text-gray-200 transition"> 
+            </div>
+
+            <!-- Submit Button -->
+            <div class="flex justify-end">
+                <button type="submit" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition duration-300">Submit</button>
+            </div>
+        </form>
+    </div>
+
 </body>
 </html>

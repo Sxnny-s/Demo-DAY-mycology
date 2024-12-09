@@ -3,137 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Genetic Library</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-</head>
-<body>
-    <h1>Welcome to your genetic library, <%= name %></h1>
+<body class="bg-gray-900 text-gray-200 min-h-screen p-6">
 
+    <h1 class="text-4xl font-bold text-green-400 mb-6 text-center">Welcome to your Genetic Library, <%= name %></h1>
 
-    <% recentGenetics.forEach(genetic => { %>
-        <li> <%= genetic.type %> </li>
+    <div class="overflow-x-auto">
+        <table class="min-w-full table-auto bg-gray-800 rounded-lg shadow-md">
+            <thead>
+                <tr class="border-b border-gray-700">
+                    <th class="p-3 text-left text-gray-200">Item</th>
+                    <th class="p-3 text-left text-gray-200">Species</th>
+                    <th class="p-3 text-left text-gray-200">Strain</th>
+                    <th class="p-3 text-left text-gray-200">Isolation</th>
+                    <th class="p-3 text-left text-gray-200">Quantity</th>
+                    <th class="p-3 text-left text-gray-200">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% recentGenetics.forEach(genetic => { %>
+                    <tr class="border-b border-gray-700" data-id="<%= genetic._id %>">
+                        <td class="p-3 text-gray-100"><%= genetic.type %></td>
+                        <!-- Species -->
+                        <td class="p-3">
+                            <div class="id<%= genetic._id %> hidden edit-mode space-y-3">
+                                <input type="text" value="<%= genetic.species %>" class="species-input w-full p-2 border border-gray-600 rounded-md bg-gray-700 text-gray-200">
+                            </div>
+                            <div class="id<%= genetic._id %> display-mode space-y-3">
+                                <p class="species-display text-gray-300"><%= genetic.species %></p>
+                            </div>
+                        </td>
+                        <!-- Strain -->
+                        <td class="p-3">
+                            <div class="id<%= genetic._id %> hidden edit-mode space-y-3">
+                                <input type="text" value="<%= genetic.strain %>" class="strain-input w-full p-2 border border-gray-600 rounded-md bg-gray-700 text-gray-200">
+                            </div>
+                            <div class="id<%= genetic._id %> display-mode space-y-3">
+                                <p class="strain-display text-gray-300"><%= genetic.strain %></p>
+                            </div>
+                        </td>
+                        <!-- Isolation -->
+                        <td class="p-3">
+                            <div class="id<%= genetic._id %> hidden edit-mode space-y-3">
+                                <input type="text" value="<%= genetic.isolation %>" class="isolation-input w-full p-2 border border-gray-600 rounded-md bg-gray-700 text-gray-200">
+                            </div>
+                            <div class="id<%= genetic._id %> display-mode space-y-3">
+                                <p class="isolation-display text-gray-300"><%= genetic.isolation %></p>
+                            </div>
+                        </td>
+                        <!-- Quantity -->
+                        <td class="p-3">
+                            <div class="id<%= genetic._id %> hidden edit-mode space-y-3">
+                                <input type="number" value="<%= genetic.quantity %>" class="quantity-input w-full p-2 border border-gray-600 rounded-md bg-gray-700 text-gray-200">
+                            </div>
+                            <div class="id<%= genetic._id %> display-mode space-y-3">
+                                <p class="quantity-display text-gray-300"><%= genetic.quantity %></p>
+                            </div>
+                        </td>
+                        <!-- Actions -->
+                        <td class="p-3 flex space-x-3">
+                            <!-- Edit button -->
+                            <button class="fas fa-edit text-blue-400 cursor-pointer hover:text-blue-600 text-xl"></button>
+                            <!-- Delete button -->
+                            <button class="fas fa-trash text-red-400 cursor-pointer hover:text-red-600 text-xl"></button>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
 
-    <!-- EDIT -->
-        <div  class="hidden id<%= genetic._id %>">
-            <span>Species:</span>
-            <input  type="text" value="<%= genetic.species %>" >
-        </div>
-    <!-- OG -->
-        <span class="block id<%= genetic._id %>"> Species: <%= genetic.species %></span>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    const table = document.querySelector('table');
+    
+    // Listen for click events on the table for edit and delete buttons
+    table.addEventListener('click', function(e) {
+        if (e.target.classList.contains('fa-edit')) {
+            handleEditClick(e);
+        } else if (e.target.classList.contains('fa-trash')) {
+            handleDeleteClick(e);
+        }
+    });
 
+    function handleEditClick(e) {
+        const row = e.target.closest('tr');  // Get the parent row
+        const id = row.dataset.id;  // Get the genetic ID from the row's data-id
 
-    <!-- EDIT -->
-        <div  class="hidden id<%= genetic._id %>">
-            <span>Strain:</span>
-            <input  type="text" value="<%= genetic.strain %>" >
-        </div>
-    <!-- OG -->
-        <span class="block id<%= genetic._id %>"> Strain: <%= genetic.strain %> </span>
+        // Query for all input fields and display fields inside this row
+        const editMode = row.querySelectorAll('.edit-mode');
+        const displayMode = row.querySelectorAll('.display-mode');
+        
+        // Toggle between edit and display modes for all fields
+        editMode.forEach(field => field.classList.toggle('hidden'));
+        displayMode.forEach(field => field.classList.toggle('hidden'));
 
+        const inputFields = row.querySelectorAll('.edit-mode input');
+        const displayFields = row.querySelectorAll('.display-mode p');
 
+        const species = inputFields[0].value;
+        const strain = inputFields[1].value;
+        const isolation = inputFields[2].value;
+        const quantity = inputFields[3].value;
 
-    <!-- EDIT -->
-        <div  class="hidden id<%= genetic._id %>">
-            <span>Isolation:</span>
-            <input  type="text" value="<%= genetic.isolation %>" >
-        </div>
-    <!-- OG -->
-        <span class="block id<%= genetic._id %>"> Isolation: <%= genetic.isolation %> </span>
-
-
-    <!-- EDIT -->
-        <div  class="hidden id<%= genetic._id %>">
-            <span>Quantity:</span>
-            <input  type="text" value="<%= genetic.quantity %>" >
-        </div>
-     <!-- OG -->
-        <span class="block id<%= genetic._id %>"> Quantity: <%= genetic.quantity %> </span>
-        <!-- save button -->
-        <button>save</button>
-        <div class="flex space-x-3">
-            <i class="fas fa-edit text-blue-400 cursor-pointer hover:text-blue-600" id="<%= genetic._id %>"></i>
-            <i class="fa-solid fa-trash text-red-400 cursor-pointer hover:text-red-600" id="<%= genetic._id %>"></i>
-        </div>
-   <% }) %>
-
-   <script>
-        const trash = document.getElementsByClassName('fa-trash');
-        const edit = document.getElementsByClassName('fa-edit');
-
-            Array.from(edit).forEach(e => {
-                    e.addEventListener('click', EDIT);
-
-                });
-
-
-            function EDIT(e){
-                const allInputs = document.querySelectorAll(`.id${e.target.id}`)
-                console.dir(allInputs)
-                allInputs[0].classList.toggle('hidden')
-                allInputs[1].classList.toggle('hidden')
-                allInputs[2].classList.toggle('hidden')
-                allInputs[3].classList.toggle('hidden')
-                allInputs[4].classList.toggle('hidden')
-                allInputs[5].classList.toggle('hidden')
-                allInputs[6].classList.toggle('hidden')
-                allInputs[7].classList.toggle('hidden')
-
-                const species = allInputs[0].querySelector('input').value
-                const strain = allInputs[2].querySelector('input').value
-                const isolation = allInputs[4].querySelector('input').value
-                const quantity = allInputs[6].querySelector('input').value
-
-                console.log(species)
-                console.log(strain)
-                console.log(isolation)
-                console.log(quantity)
-
-                fetch(`/inventory/genetic/update/${e.target.id}`,{
-                    method: 'PUT',
-                    headers: {
-                         'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ species, strain, isolation, quantity })
-                })
-                .then(response => {
-                    if (response.ok) {
-
-                        // window.location.reload();
-                    } else {
-                        console.error('Error updating genetics');
-                    }
-                })
-                .catch(error => console.error('Error:', error));
+        fetch(`/inventory/genetic/update/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ species, strain, isolation, quantity }),
+        })
+        .then(response => {
+            if (response.ok) {
+                // Update the display fields with the new values
+                displayFields[0].textContent = species;
+                displayFields[1].textContent = strain;
+                displayFields[2].textContent = isolation;
+                displayFields[3].textContent = quantity;
+            } else {
+                console.error('Error updating genetics');
             }
-                            
+        })
+        .catch(error => console.error('Error:', error));
+    }
 
-
-            Array.from(trash).forEach(e => {
-                e.addEventListener('click', DEL);
-            });
-
-            function DEL(e) {
-                const geneticID = e.target.id;
-                console.log(geneticID)
-                fetch(`/inventory/genetic/delete/${geneticID}`, {
-                    method: "DELETE",
-                    headers: {
-                        'content-type': 'application/json'
-                    }
-                })
-                .then(response => {
-                    if (response.ok) {
-                        window.location.reload();
-                    } else {
-                        console.error('Error deleting genetics');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
+    function handleDeleteClick(e) {
+        const row = e.target.closest('tr');  // Get the parent row
+        const id = row.dataset.id;  // Get the genetic ID from the row's data-id
+        
+        fetch(`/inventory/genetic/delete/${id}`, {
+            method: "DELETE",
+            headers: {
+                'content-type': 'application/json',
+            },
+        })
+        .then(response => {
+            if (response.ok) {
+                row.remove();  // Remove the row from the table
+            } else {
+                console.error('Error deleting genetics');
             }
-   </script>
+        })
+        .catch(error => console.error('Error:', error));
+    }
+});
+
+    </script>
+
 </body>
 </html>

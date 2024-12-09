@@ -12,7 +12,7 @@ router.get('/', checkAuth, async (req,res) => {
         res.render('index.ejs', {
             name: req.user.name,
             
-        })
+        }) 
     }catch (err) {
         console.error('Error loading dashboard', err)
         res.status(500).send('Error 500');
