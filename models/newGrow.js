@@ -8,7 +8,7 @@ const stageSchema = new mongoose.Schema({
     },
     date: {
         type:Date,
-        default: Date.new
+        default: Date.now
     },
     isCurrent: {
         type: Boolean,
@@ -35,8 +35,8 @@ const newGrowSchema = new mongoose.Schema({
         required: true
     },
     endDate: {
-        type: Date,  // Leave as optional
-        required: false
+        type: Date,
+       
     }, 
     generation: { 
         type: Number, 
@@ -69,7 +69,8 @@ const newGrowSchema = new mongoose.Schema({
     },
     wetYield: {
         type: Number,
-        required: false  // Can be calculated later
+        default: 0,
+        // required: false  // Can be calculated later
     },
     dryYield: { 
         type: Number,
@@ -83,7 +84,7 @@ const newGrowSchema = new mongoose.Schema({
     stages: {
         type: [stageSchema],
         default: () => [
-            { stage: 'inoculation', isCurrent: true }, // First stage marked as current
+            { stage: 'inoculation', isCurrent: true, }, // First stage marked as current
             { stage: 'full colonization' },
             { stage: 'spawned' },
             { stage: 'primordia' },

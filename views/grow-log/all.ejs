@@ -6,53 +6,49 @@
     <title>Mycology App - View All Grows</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100">
-    <h1 class="text-2xl font-bold text-center mt-4">All Active Grows</h1>
+<body class="bg-gray-900 text-gray-200">
+
+    <h1 class="text-3xl font-semibold text-center mt-8 text-green-400">All Active Grows</h1>
+    <a href="/grow-log/completedGrows">View completed grows</a>
     <div id="grows-container" class="container mx-auto p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-
         <% grows.forEach(grow => { %>
-            <div class="bg-white p-4 rounded-lg shadow-lg relative">
-                <!-- Next Stage Button -->
-                
-               <!-- Conditionally Render Button -->
-            <% if (grow.stages.find(stage => stage.isCurrent)?.stage === 'fruiting') { %>
-                <!-- Harvest Button (only shows in Fruiting stage) -->
-                <button 
-                    class=" harvest top-2 right-2 bg-yellow-500 text-white px-2 py-1 text-xs rounded hover:bg-yellow-600"
-                    data-grow-id="<%= grow._id %>">
-                    Harvest
-                </button>
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md relative">
+                <!-- Conditionally Render Button -->
+                <% if (grow.stages.find(stage => stage.isCurrent)?.stage === 'harvest' ) { %>
+                    <!-- Harvest Button (only shows in Fruiting stage) -->
+                    <button 
+                        class="harvest top-2 right-2 bg-yellow-500 text-white px-4 py-2 text-sm rounded hover:bg-yellow-600 transition-all duration-300"
+                        data-grow-id="<%= grow._id %>">
+                        Harvest
+                    </button>
+                <% } else { %>
+                    <!-- Next Stage Button (for all other stages) -->
+                    <button 
+                        class="absolute top-2 right-2 bg-green-500 text-white px-4 py-2 text-sm rounded hover:bg-green-600 transition-all duration-300"
+                        data-grow-id="<%= grow._id %>">
+                        Next Stage
+                    </button>
+                <% } %>
 
-            <% } else { %>
-                <!-- Next Stage Button (for all other stages) -->
-                <button 
-                    class="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 text-xs rounded hover:bg-green-600"
-                    data-grow-id="<%= grow._id %>">
-                    Next Stage
-                </button>
-            <% } %>
-                
                 <!-- Grow Details -->
-                <h3 class="text-lg font-bold text-purple-500"><%= grow.species %> - <%= grow.strain %></h3>
-                <p class="text-gray-700">Tek: <%= grow.tek || 'N/A' %></p>
-                <p class="text-gray-700">Current Stage: <%= grow.stages.find(stage => stage.isCurrent)?.stage || 'N/A' %></p>
-                <p class="text-gray-700">Flush Count: <%= grow.flushCount %></p>
+                <h3 class="text-xl font-semibold text-purple-400 mt-4"><%= grow.species %> - <%= grow.strain %></h3>
+                <p class="text-gray-300">Tek: <%= grow.tek || 'N/A' %></p>
+                <p class="text-gray-300">Current Stage: <%= grow.stages.find(stage => stage.isCurrent)?.stage || 'N/A' %></p>
+                <p class="text-gray-300">Flush Count: <%= grow.flushCount %></p>
 
+                <!-- Weight Input Form -->
+                <div id="weightInput-<%= grow._id %>" class="weightInput hidden bg-gray-700 p-4 rounded-lg shadow-lg relative mt-4">
+                    <form action="/grow-log/harvest/<%= grow._id %> " method="post">
+                        <label for="weight" class="block text-gray-200 font-semibold">Enter Weight (g)</label>
+                        <input id="weight" type="number" name="weight" class="w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500">
+                        <button type="submit" class="mt-4 bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-all duration-300">Submit</button>
+                    </form>
+                </div>
 
-                    <div id="weightInput-<%= grow._id %>" class="weightInput hidden bg-blue-500 p-4 rounded-lg shadow-lg relative">
-                        <form action="/grow-log/harvest/<%= grow._id %> " method="put">
-                            <label for="weight">Enter Weight(oz)</label>
-                            <input id="weight" type="number" name="weight">
-                            <button type="submit">Submit</button>
-                        </form>
-                    </div>
-
-
-                <%# Progress Bar %>
-
+                <!-- Progress Bar -->
                 <div class="mt-4">
-                    <div class="relative h-4 bg-gray-300 rounded-lg">
+                    <div class="relative h-4 bg-gray-700 rounded-lg">
                         <div class="progress-bar absolute h-full bg-purple-500 rounded-lg" 
                             style="width: <%= (grow.stages.findIndex(stage => stage.isCurrent) + 1) / stages.length * 100 %>%;"></div>
                     </div>
@@ -65,36 +61,26 @@
 
                 <!-- Edit and Delete Icons -->
                 <div class="mt-4 flex justify-end space-x-3">
-                    <i class="fas fa-edit text-blue-400 cursor-pointer hover:text-blue-600" id="<%= grow._id %>"></i>
-                    <i class="fa-solid fa-trash text-red-400 cursor-pointer hover:text-red-600" id="<%= grow._id %>"></i>
+                    <i class="fas fa-edit text-blue-400 cursor-pointer hover:text-blue-600 transition-all duration-300" id="<%= grow._id %>"></i>
+                    <i class="fa-solid fa-trash text-red-400 cursor-pointer hover:text-red-600 transition-all duration-300" id="<%= grow._id %>"></i>
                 </div>
-
             </div>
-
         <% }) %>
+    </div>
 
-       
     <script>
         const nextStageButtons = document.querySelectorAll('button[data-grow-id]');
         const harvestButtons = document.querySelectorAll('.harvest')
-        
 
-        // Entering harvest weight functionality 
+        // Entering harvest weight functionality
         harvestButtons.forEach(button => {
             button.addEventListener('click', (e) => {
                 const growId = e.target.getAttribute('data-grow-id')
                 const currentWeightInput = document.getElementById(`weightInput-${growId}`)
                 currentWeightInput.classList.toggle('hidden')
-
             })
-
-
-
-
         })
 
-
-        
         // Next Stage Functionality
         nextStageButtons.forEach(button => {
             button.addEventListener('click', async (e) => {
@@ -105,13 +91,13 @@
                         const data = await response.json();
                         const updatedGrow = data.grow
                         // Update the progress bar width dynamically
-                        const card = e.target.closest('.bg-white');
+                        const card = e.target.closest('.bg-gray-800');
                         const progressBar = card.querySelector('div.progress-bar');
                         const progressPercentage = (updatedGrow.stages.findIndex(stage => stage.isCurrent) + 1) / updatedGrow.stages.length * 100;
                         progressBar.style.width = `${progressPercentage}%`;
-                        
+
                         // Update the current stage text
-                        const currentStage = card.querySelector('p.text-gray-700:nth-of-type(2)');
+                        const currentStage = card.querySelector('p.text-gray-300:nth-of-type(2)');
                         currentStage.textContent = `Current Stage: ${updatedGrow.stages.find(stage => stage.isCurrent)?.stage || 'N/A'}`;
                     } else {
                         console.error('Failed to update stage');
@@ -122,5 +108,6 @@
             });
         });
     </script>
+
 </body>
 </html>

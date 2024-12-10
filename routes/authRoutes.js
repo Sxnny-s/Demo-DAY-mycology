@@ -3,14 +3,18 @@ const passport = require('passport');
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const router = express.Router();
+const newGrow = require('../models/newGrow')
 
 
 // render index.ejs / Dashboard
 router.get('/', checkAuth, async (req,res) => {
-
+    const totalGrows = await newGrow.countDocuments({user: req.user._id});
+    const activeGrows = await newGrow.countDocuments({user: req.user._id, status: 'active'});
     try { 
         res.render('index.ejs', {
             name: req.user.name,
+            totalGrows,
+            activeGrows
             
         }) 
     }catch (err) {

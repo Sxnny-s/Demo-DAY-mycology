@@ -14,5 +14,9 @@ router.get('/all', mushroomController.getAllGrowsPage)
 router.post('/new', mushroomController.startGrow)
 // update stage
 router.post('/next-stage/:id', mushroomController.updateStage)
+// Update weight property 
+router.post('/harvest/:id', mushroomController.updateGrowWeight)
+// rendering completed grows page
+router.get('/completedGrows', mushroomController.getCompletedGrow)
 
 module.exports = router;

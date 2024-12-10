@@ -30,7 +30,7 @@
 
         <!-- Main Content Area -->
         <div class="flex-1 p-8">
-            <h2 class="text-3xl font-semibold mb-6 text-green-300">Dashboard</h2>
+            <h2 class="text-3xl font-semibold mb-6 text-green-300">Welcome back <%= name %> </h2>
 
             <!-- Overview Section -->
             <div class="bg-gray-800 rounded-lg p-6 mb-6 shadow-lg">
@@ -38,11 +38,11 @@
                 <div class="grid grid-cols-2 gap-6">
                     <div class="p-6 bg-gray-700 rounded-lg text-center">
                         <h4 class="text-lg font-semibold text-gray-400">Total Grows</h4>
-                        <p class="text-4xl font-extrabold">15</p>
+                        <p class="text-4xl font-extrabold"><%= totalGrows %></p>
                     </div>
                     <div class="p-6 bg-gray-700 rounded-lg text-center">
                         <h4 class="text-lg font-semibold text-gray-400">Active Grows</h4>
-                        <p class="text-4xl font-extrabold">8</p>
+                        <p class="text-4xl font-extrabold"><%= activeGrows %></p>
                     </div>
                 </div>
             </div>

@@ -1,6 +1,4 @@
 const newGrow = require('../models/newGrow')
-const NewGrow = require('../models/newGrow')
-
 
 // ----------------- Read Operations -----------------
 
@@ -17,21 +15,31 @@ exports.getNewGrowForm = (req,res) => {
 // getting view all grows page
 exports.getAllGrowsPage = async (req,res) => { 
     const stages = ['inoculation', 'full colonization', 'spawned', 'primordia', 'pins', 'fruiting', 'harvest'];
+
     try {
-        const grows = await NewGrow.find({ user: req.user._id })
+        const grows = await newGrow.find({ user: req.user._id, status: 'active' })
         res.render('grow-log/all',{
             grows,
             stages
-        }
-
-        )
+        })
     } catch (error) {
         console.error('Error fetching grows:', error);
 
     }
 }
 
-
+// Getting completed grows page
+exports.getCompletedGrow = async (req, res) => {
+     try {
+        const grows = await newGrow.find({user: req.user._id, status: 'completed' })
+        console.log(grows)
+         res.render('grow-log/completedGrows',{
+            grows
+         });
+     } catch (err) {
+        
+     }
+};
 
 
 // ----------------- Create Operations -----------------
@@ -39,7 +47,7 @@ exports.getAllGrowsPage = async (req,res) => {
 // Create new grow object
 exports.startGrow = async (req,res) => {
     const {tek,species,strain,generation,contamination,substrateType,grainType,substrateDepth} = req.body
-    const freshGrow = new NewGrow({
+    const freshGrow = new newGrow({
         tek,
         species,
         strain,
@@ -50,7 +58,7 @@ exports.startGrow = async (req,res) => {
         substrateDepth,
         user: req.user._id
     })
-
+    console.log(freshGrow)
     try {
         await freshGrow.save();
         res.redirect('/grow-log')
@@ -66,7 +74,7 @@ exports.updateStage = async (req, res) => {
    const { id: growid } = req.params;
 
    try {
-    const grow = await NewGrow.findById(growid) 
+    const grow = await newGrow.findById(growid) 
 
     const currentStage = grow.stages.findIndex(stage => stage.isCurrent === true)
     console.log(currentStage) 
@@ -74,7 +82,8 @@ exports.updateStage = async (req, res) => {
     grow.stages[currentStage].isCurrent = false
     // Settting the next stage to true
     grow.stages[currentStage + 1].isCurrent = true
-
+    // Setting the date of the next stage to the current date
+    grow.stages[currentStage + 1].date = new Date()
     await grow.save();
     return res.status(200).json({ message: 'Stage updated successfully', grow:grow });
 
@@ -85,16 +94,23 @@ exports.updateStage = async (req, res) => {
     
 }
 
-
+// updating wet weight
 exports.updateGrowWeight = async (req, res) => {
     const growid = req.params.id 
-
+    const wetYield = req.body.weight
+    const status = 'completed'
+    const endDate = new Date()
+    
     try {
         await newGrow.findByIdAndUpdate(growid,{
-            
+            wetYield,
+            status,
+            endDate
         })
-
+        // res.status(200).json({message: 'weight updated Succefully'})
+        res.redirect('/grow-log/all')
     } catch (err) {
-        
+        console.error(err)
+        res.status(500).json({error: 'Failed to update weight'})
     }
 }
