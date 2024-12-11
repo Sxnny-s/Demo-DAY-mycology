@@ -70,6 +70,7 @@ exports.startGrow = async (req,res) => {
 
 
 // ----------------- Update Operations -----------------
+// Udateing stages 
 exports.updateStage = async (req, res) => {
    const { id: growid } = req.params;
 
@@ -78,6 +79,7 @@ exports.updateStage = async (req, res) => {
 
     const currentStage = grow.stages.findIndex(stage => stage.isCurrent === true)
     console.log(currentStage) 
+    console.log(grow.stages)
     // setting current stage to false
     grow.stages[currentStage].isCurrent = false
     // Settting the next stage to true
@@ -91,7 +93,7 @@ exports.updateStage = async (req, res) => {
         console.error(err);
         return res.status(500).json({error: 'Server Error'})
    }
-    
+     
 }
 
 // updating wet weight

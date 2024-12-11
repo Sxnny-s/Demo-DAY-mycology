@@ -6,20 +6,49 @@
     <title>Completed Grow Records - Agricultural Lab</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-900 text-gray-200">
+<body class="bg-gray-900 text-gray-200 flex">
 
-    <div class="container mx-auto p-6">
+    <!-- Sidebar -->
+    <div class="w-64 bg-gray-800 text-white h-screen p-4">
+        <h1 class="text-2xl font-semibold mb-8">Mycology Lab</h1>
+        <ul>
+            <li class="mb-4">
+                <a href="/" class="text-lg hover:text-green-300">Home</a>
+            </li>
+            <li class="mb-4">
+                <a href="/inventory" class="text-lg hover:text-green-300">Inventory</a>
+            </li>
+            <li class="mb-4 pl-4">
+                <a href="/inventory/equipment" class="text-lg hover:text-green-300">Lab Equipment</a>
+            </li>
+            <li class="mb-4 pl-4">
+                <a href="/inventory/genetic-inventory" class="text-lg hover:text-green-300">Genetics</a>
+            </li>
+            <li class="mb-4">
+                <a href="/grow-log" class="text-lg hover:text-green-300">Grow Log</a>
+            </li>
+            <li class="mb-4 pl-4">
+                <a href="/grow-log/all" class="text-lg hover:text-green-300">All Grows</a>
+            </li>
+            <li class="mb-4 pl-4">
+                <a href="/grow-log/all" class="text-lg text-green-300">History</a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 p-6">
         <h1 class="text-3xl font-semibold text-green-300 mb-8">Completed Grow Records</h1>
         
         <!-- Filter Options (optional) -->
-        <div class="mb-6">
+        <!-- <div class="mb-6">
             <label for="filter" class="text-gray-400">Filter by crop type or strain</label>
             <input type="text" id="filter" placeholder="Search crop type or strain..." class="px-4 py-2 rounded bg-gray-800 text-gray-200">
-        </div>
+        </div> -->
         
- <!-- Grow Card -->
- <% grows.forEach(grow => { %>
-        <div class="bg-gray-800 p-4 rounded-lg shadow-lg">
+        <!-- Grow Card -->
+        <% grows.forEach(grow => { %>
+        <div class="bg-gray-800 p-4 rounded-lg shadow-lg mb-4" data-grow-id="<%= grow._id %>">
             <h2 class="text-xl font-semibold text-green-300">Grow ID #<%= grow._id.toString().slice(-4) %></h2>
             <p class="text-gray-400">Species: <%= grow.species %> </p>
             <p class="text-gray-400">Strain: <%= grow.strain %> </p>
@@ -27,58 +56,59 @@
             <p class="text-gray-400">End Date: <%= new Date(grow.endDate).toLocaleString('en-US') %> </p>
             <p class="text-gray-400">Total Time: <%= Math.floor((new Date(grow.endDate) - new Date(grow.startDate)) / (1000 * 60 * 60 * 24)) %> days </p>
             <p class="text-gray-400"> Wet Yield: <%= grow.wetYield %>g</p>
-            <!-- <p class="text-gray-400">Contamination: No</p> -->
-            <!-- <p class="text-gray-400">Flushes: 3</p> -->
+            
             <!-- View Details Button -->
-            <button class="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" data-modal-toggle="detailsModal">View Full Details</button>
+            <button class="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" data-modal-toggle="detailsModal-<%= grow._id %>">View Full Details</button>
         </div>
         
-        <!-- Modal -->
-        <div id="detailsModal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-75 z-50 flex items-center justify-center">
+        <!-- Modal for this specific Grow -->
+        <div id="detailsModal-<%= grow._id %>" class="hidden fixed inset-0 bg-gray-800 bg-opacity-75 z-50 flex items-center justify-center">
             <div class="bg-gray-900 p-8 rounded-lg shadow-lg w-1/3">
-                <h2 class="text-2xl text-green-300">Grow Details</h2>
+                <h2 class="text-2xl text-green-300">Grow Details for ID #<%= grow._id.toString().slice(-4) %></h2>
                 
                 <!-- Notes -->
-                <div class="mt-4">
+                <!-- <div class="mt-4">
                     <h3 class="text-lg font-semibold text-gray-300">Notes</h3>
                     <p class="text-gray-400">The grow was completed on schedule with no contamination issues. The yield was consistent, and the flushes were abundant.</p>
-                </div>
+                </div> -->
                 
                 <!-- Timeline -->
                 <div class="mt-4">
                     <h3 class="text-lg font-semibold text-gray-300">Timeline</h3>
                     <ul class="text-gray-400">
-                        <li>Inoculation: 10/01/2023</li>
-                        <li>Full Colonization: 10/10/2023</li>
-                        <li>Spawned: 10/15/2023</li>
-                        <li>Primordia: 11/01/2023</li>
-                        <li>Fruit: 11/10/2023</li>
-                        <li>Harvested: 12/01/2023</li>
+                        <li>Inoculation: <%= new Date(grow.stages[0].date).toLocaleString('en-US') %></li>
+                        <li>Full Colonization: <%= new Date(grow.stages[1].date).toLocaleString('en-US') %></li>
+                        <li>Spawned: <%= new Date(grow.stages[2].date).toLocaleString('en-US') %></li>
+                        <li>Primordia: <%= new Date(grow.stages[3].date).toLocaleString('en-US') %></li>
+                        <li>Pins: <%= new Date(grow.stages[4].date).toLocaleString('en-US') %></li> 
+                        <li>Fruit: <%= new Date(grow.stages[5].date).toLocaleString('en-US') %></li>
+                        <li>Harvested: <%= new Date(grow.stages[6].date).toLocaleString('en-US') %></li> 
                     </ul>
                 </div>
                 
-                <!-- Photos (Optional) -->
-                <!-- <div class="mt-4">
-                    <h3 class="text-lg font-semibold text-gray-300">Photos</h3>
-                    <img src="photo1.jpg" alt="Grow photo 1" class="w-full h-auto mt-2 rounded-lg">
-                    <img src="photo2.jpg" alt="Grow photo 2" class="w-full h-auto mt-2 rounded-lg">
-                </div> -->
-                
-                <button id="closeModal" class="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Close</button>
+                <button class="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 close-modal" data-modal-target="detailsModal-<%= grow._id %>">Close</button>
             </div>
         </div>
-        
         <% }) %>
-<script>
-    // Show modal
-    document.querySelectorAll("[data-modal-toggle]").forEach(button => {
-        button.addEventListener("click", () => {
-            document.getElementById("detailsModal").classList.remove("hidden");
-        });
-    });
+    </div>
 
-    // Close modal
-    document.getElementById("closeModal").addEventListener("click", () => {
-        document.getElementById("detailsModal").classList.add("hidden");
-    });
-</script>
+    <script>
+        // Show modal dynamically
+        document.querySelectorAll("[data-modal-toggle]").forEach(button => {
+            button.addEventListener("click", (e) => {
+                const modalId = e.target.getAttribute("data-modal-toggle");
+                document.getElementById(modalId).classList.remove("hidden");
+            });
+        });
+
+        // Close modal dynamically
+        document.querySelectorAll(".close-modal").forEach(button => {
+            button.addEventListener("click", (e) => {
+                const modalId = e.target.getAttribute("data-modal-target");
+                document.getElementById(modalId).classList.add("hidden");
+            });
+        });
+    </script>
+
+</body>
+</html>

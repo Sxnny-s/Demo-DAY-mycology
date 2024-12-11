@@ -8,7 +8,7 @@ const stageSchema = new mongoose.Schema({
     },
     date: {
         type:Date,
-        default: Date.now
+        default: null
     },
     isCurrent: {
         type: Boolean,
@@ -76,6 +76,16 @@ const newGrowSchema = new mongoose.Schema({
         type: Number,
         required: false  // Can be calculated later
     },
+    notes: [{
+        note: {
+            type: String, 
+            required: true 
+        },
+        createdAt: {
+            type: Date, 
+            default: Date.now // Timestamp for when the note was added
+        }
+    }],
     status: {
         type: String,
         enum: ['active', 'completed', 'cancelled'],
@@ -84,13 +94,13 @@ const newGrowSchema = new mongoose.Schema({
     stages: {
         type: [stageSchema],
         default: () => [
-            { stage: 'inoculation', isCurrent: true, }, // First stage marked as current
-            { stage: 'full colonization' },
-            { stage: 'spawned' },
-            { stage: 'primordia' },
-            { stage: 'pins' },
-            { stage: 'fruiting' },
-            { stage: 'harvest' }
+            { stage: 'inoculation', isCurrent: true, date: new Date() },  // Inoculation stage gets the current date
+            { stage: 'full colonization', date: null },
+            { stage: 'spawned', date: null },
+            { stage: 'primordia', date: null },
+            { stage: 'pins', date: null },
+            { stage: 'fruiting', date: null },
+            { stage: 'harvest', date: null }
         ]
     },
     user: { 

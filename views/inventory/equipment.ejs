@@ -7,76 +7,123 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-<body class="bg-gray-900 text-gray-200 min-h-screen p-6">
+<body class="bg-gray-900 text-gray-200 min-h-screen flex">
 
-    <h1 class="text-4xl font-bold text-green-400 mb-8 text-center">
-        Welcome to your Lab Equipment Inventory, <%= name %>
-    </h1>
+    <!-- Sidebar -->
+    <div class="w-64 bg-gray-800 text-white h-screen p-4">
+        <h1 class="text-2xl font-semibold mb-8">Mycology Lab</h1>
+        <ul>
+            <li class="mb-4">
+                <a href="/" class="text-lg hover:text-green-300">Home</a>
+            </li>
+            <li class="mb-4">
+                <a href="/inventory" class="text-lg hover:text-green-300">Inventory</a>
+            </li>
+            <li class="mb-4 pl-4">
+                <a href="/inventory/equipment" class="text-lg text-green-300">Lab Equipment</a>
+            </li>
+            <li class="mb-4 pl-4">
+                <a href="/inventory/genetic-inventory" class="text-lg hover:text-green-300">Genetics</a>
+            </li>
+            <li class="mb-4">
+                <a href="/grow-log" class="text-lg hover:text-green-300">Grow Log</a>
+            </li>
+            <li class="mb-4 pl-4">
+                <a href="/grow-log/all" class="text-lg hover:text-green-300">All Grows</a>
+            </li>
+            <li class="mb-4 pl-4">
+                <a href="/grow-log/completedGrows" class="text-lg hover:text-green-300">History</a>
+            </li> 
+        </ul>
+    </div> 
 
-    <div class="overflow-x-auto">
-        <table class="min-w-full table-auto bg-gray-800 rounded-lg shadow-md">
-            <thead>
-                <tr class="border-b border-gray-700">
-                    <th class="p-4 text-left text-gray-200">Item</th>
-                    <th class="p-4 text-left text-gray-200">Quantity</th>
-                    <th class="p-4 text-left text-gray-200">Price</th>
-                    <th class="p-4 text-left text-gray-200">Purchase Date</th>
-                    <th class="p-4 text-left text-gray-200">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% recentEquipment.forEach(equipment => { %>
-                    <tr class="border-b border-gray-700" data-id="<%= equipment._id %>">
-                        <!-- Editable Item -->
-                        <td class="p-4">
-                            <div class="id<%= equipment._id %> hidden edit-mode space-y-3">
-                                <input type="text" value="<%= equipment.item %>" class="item-input w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-gray-200 focus:ring-2 focus:ring-green-500">
-                            </div>
-                            <div class="id<%= equipment._id %> display-mode space-y-3">
-                                <p class="item-display text-gray-300"><%= equipment.item %></p>
-                            </div>
-                        </td>
-                        <!-- Quantity -->
-                        <td class="p-4">
-                            <div class="id<%= equipment._id %> hidden edit-mode space-y-3">
-                                <input type="number" value="<%= equipment.quantity %>" class="quantity-input w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-gray-200 focus:ring-2 focus:ring-green-500">
-                            </div>
-                            <div class="id<%= equipment._id %> display-mode space-y-3">
-                                <p class="quantity-display text-gray-300"><%= equipment.quantity %></p>
-                            </div>
-                        </td>
-                        <!-- Price -->
-                        <td class="p-4">
-                            <div class="id<%= equipment._id %> hidden edit-mode space-y-3">
-                                <input type="text" value="<%= equipment.price %>" class="price-input w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-gray-200 focus:ring-2 focus:ring-green-500">
-                            </div>
-                            <div class="id<%= equipment._id %> display-mode space-y-3">
-                                <p class="price-display text-gray-300"><%= equipment.price %></p>
-                            </div>
-                        </td>
-                        <!-- Purchase Date -->
-                        <td class="p-4">
-                            <div class="id<%= equipment._id %> hidden edit-mode space-y-3">
-                                <input type="date" value="<%= equipment.purchaseDate.toISOString().substring(0, 10) %>" class="date-input w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-gray-200 focus:ring-2 focus:ring-green-500">
-                            </div>
-                            <div class="id<%= equipment._id %> display-mode space-y-3">
-                                <p class="date-display text-gray-300"><%= equipment.purchaseDate.toDateString() %></p>
-                            </div>
-                        </td>
-                        <!-- Actions -->
-                        <td class="p-4 flex space-x-3">
-                            <!-- Edit button -->
-                            <button class="fas fa-edit text-blue-400 cursor-pointer hover:text-blue-600 text-xl transition-all duration-300"></button>
-                            <!-- Delete button -->
-                            <button class="fas fa-trash text-red-400 cursor-pointer hover:text-red-600 text-xl transition-all duration-300"></button>
-                        </td>
+    <!-- Main content (This section will be pushed to the right when sidebar is visible) -->
+    <div class="flex-1 p-6">
+        <!-- Mobile Menu Toggle Button (will show on smaller screens) -->
+        <button id="menuToggle" class="md:hidden text-white p-4 rounded-md bg-gray-800 hover:bg-gray-700 transition duration-300">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Main Content -->
+        <h1 class="text-4xl font-bold text-green-400 mb-8 text-center">
+            Welcome to your Lab Equipment Inventory, <%= name %>
+        </h1>
+
+        <div class="overflow-x-auto">
+            <table class="min-w-full table-auto bg-gray-800 rounded-lg shadow-md">
+                <thead>
+                    <tr class="border-b border-gray-700">
+                        <th class="p-4 text-left text-gray-200">Item</th>
+                        <th class="p-4 text-left text-gray-200">Quantity</th>
+                        <th class="p-4 text-left text-gray-200">Price</th>
+                        <th class="p-4 text-left text-gray-200">Purchase Date</th>
+                        <th class="p-4 text-left text-gray-200">Actions</th>
                     </tr>
-                <% }) %>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <% recentEquipment.forEach(equipment => { %>
+                        <tr class="border-b border-gray-700" data-id="<%= equipment._id %>">
+                            <!-- Editable Item -->
+                            <td class="p-4">
+                                <div class="id<%= equipment._id %> hidden edit-mode space-y-3">
+                                    <input type="text" value="<%= equipment.item %>" class="item-input w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-gray-200 focus:ring-2 focus:ring-green-500">
+                                </div>
+                                <div class="id<%= equipment._id %> display-mode space-y-3">
+                                    <p class="item-display text-gray-300"><%= equipment.item %></p>
+                                </div>
+                            </td>
+                            <!-- Quantity -->
+                            <td class="p-4">
+                                <div class="id<%= equipment._id %> hidden edit-mode space-y-3">
+                                    <input type="number" value="<%= equipment.quantity %>" class="quantity-input w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-gray-200 focus:ring-2 focus:ring-green-500">
+                                </div>
+                                <div class="id<%= equipment._id %> display-mode space-y-3">
+                                    <p class="quantity-display text-gray-300"><%= equipment.quantity %></p>
+                                </div>
+                            </td>
+                            <!-- Price -->
+                            <td class="p-4">
+                                <div class="id<%= equipment._id %> hidden edit-mode space-y-3">
+                                    <input type="text" value="<%= equipment.price %>" class="price-input w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-gray-200 focus:ring-2 focus:ring-green-500">
+                                </div>
+                                <div class="id<%= equipment._id %> display-mode space-y-3">
+                                    <p class="price-display text-gray-300">$<%= equipment.price %></p>
+                                </div>
+                            </td>
+                            <!-- Purchase Date -->
+                            <td class="p-4">
+                                <div class="id<%= equipment._id %> hidden edit-mode space-y-3">
+                                    <input type="date" value="<%= equipment.purchaseDate.toISOString().substring(0, 10) %>" class="date-input w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-gray-200 focus:ring-2 focus:ring-green-500">
+                                </div>
+                                <div class="id<%= equipment._id %> display-mode space-y-3">
+                                    <p class="date-display text-gray-300"><%= equipment.purchaseDate.toDateString() %></p>
+                                </div>
+                            </td>
+                            <!-- Actions -->
+                            <td class="p-4 flex space-x-3">
+                                <!-- Edit button -->
+                                <button class="fas fa-edit text-blue-400 cursor-pointer hover:text-blue-600 text-xl transition-all duration-300"></button>
+                                <!-- Delete button -->
+                                <button class="fas fa-trash text-red-400 cursor-pointer hover:text-red-600 text-xl transition-all duration-300"></button>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
     </div>
 
+    <!-- Script to Toggle Sidebar on Mobile -->
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            
+            menuToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('-translate-x-full');
+            });
+        });
+
         document.addEventListener('DOMContentLoaded', function() {
             const table = document.querySelector('table');
             
